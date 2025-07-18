@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اندلالي - المعلمة الذكية للبحث العلمي</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <meta name="description" content="منصة ذكية تقدم استشارات بحثية وعلمية للطلاب والباحثين باستخدام الذكاء الاصطناعي">
+    <meta name="keywords" content="بحث علمي, ذكاء اصطناعي, اندلالي, دليل مشروع التخرج, باحث, معلمة ذكية">
+    <meta name="author" content="اندلالي">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        /* ألوان مستوحاة من الصورة المرفقة */
+        :root {
+            --main-yellow: #4fd18b; /* كان أصفر، الآن أخضر فاتح */
+            --main-blue: #2d6cdf;
+            --main-green: #1ebc8a;
+            --main-red: #f15a29;
+            --main-bg: #f7f8fa;
+        }
+        .highlight {
+            color: var(--main-yellow);
+            font-weight: bold;
+        }
+        .section-title {
+            color: var(--main-blue);
+        }
+        .cta-button, .submit-btn, .submit-rating-btn {
+            background: linear-gradient(90deg, var(--main-blue), var(--main-green));
+            border: none;
+        }
+        /* استبدال استخدام اللون الأصفر في البطاقات */
+        .info-card {
+            border-top: 4px solid var(--main-yellow);
+        }
+        .support-link {
+            color: var(--main-blue);
+            font-weight: bold;
+            text-decoration: none;
+        }
+        .support-link:hover {
+            color: var(--main-green);
+        }
+        .hero {
+            position: relative;
+            background: linear-gradient(rgba(0, 64, 32, 0.45), rgba(0, 64, 32, 0.45)), url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1500&q=80') center center/cover no-repeat;
+            min-height: 420px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .hero-container {
+            position: relative;
+            z-index: 2;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0; right: 0; bottom: 0; left: 0;
+            background: linear-gradient(rgba(0,64,32,0.45), rgba(0,64,32,0.45));
+            z-index: 1;
+        }
+        .hero-content, .hero-image {
+            position: relative;
+            z-index: 2;
+        }
+        .navbar {
+            background: #fff !important;
+            box-shadow: 0 2px 8px rgba(44, 76, 130, 0.04);
+        }
+        .nav-logo span, .nav-logo i, .nav-subtitle {
+            color: var(--main-blue) !important;
+        }
+        .footer-section h3 {
+            color: #4fd18b !important;
+        }
+        .hero-features i {
+            color: #4fd18b !important;
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.18); opacity: 0.8; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="nav-logo">
+                    <i class="fas fa-lightbulb"></i>
+                    <span>اندلالي</span>
+                </div>
+                <div class="nav-subtitle">
+                    المعلمة الذكية للبحث العلمي
+                </div>
+                <ul class="nav-links">
+                    <li><a href="#home">الرئيسية</a></li>
+                    <li><a href="#about">عن إندلالي</a></li>
+                    <li><a href="#consultation">المعلمة الذكية</a></li>
+                    <li><a href="#support">المواقع الداعمة</a></li>
+                    <li><a href="#map">تحليلات الخريطة</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <p class="hero-subtitle" style="font-size:1.35rem;font-weight:900;text-shadow:0 2px 12px rgba(0,0,0,0.13);letter-spacing:0.5px;margin-top:32px;">المعلمة الذكية للبحث العلمي</p>
+                <p class="hero-description highlight" style="font-size:1.05rem;background:rgba(0,0,0,0.18);padding:14px 22px;border-radius:18px;font-weight:700;box-shadow:0 2px 12px rgba(0,0,0,0.10);margin-bottom:10px;text-align:justify;">تعمل "انَدلالي" المعلمة الذكية على إثراء منظومة البحث والتطوير والابتكار، وتسريع التطوير البحثي، وتتجير المخرجات البحثية، وبناء القدرات الطلابية، لتعزيز تنافسية المملكة وريادتها عالميًا.</p>
+                <div class="hero-features">
+                    <span id="hero-feature-dynamic" style="display:block;margin-top:18px;font-size:1.18rem;font-weight:bold;"></span>
+                </div>
+                <a href="#consultation" class="cta-button">ابدأ استفسارك العلمي الآن</a>
+            </div>
+            <div class="hero-image">
+                <i class="fas fa-lightbulb"></i>
+                <span class="hero-brand">اندلالي</span>
+            </div>
+        </div>
+    </section>
+    <!-- احذف المعرض من مكانه السابق أسفل الهيرو -->
+
+    <!-- من نحن -->
+    <section id="about" class="info-section">
+        <div class="container">
+            <div class="info-content">
+                <h2 class="section-title">عن إندلالي</h2>
+                <div class="about-cards-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:32px 24px;justify-items:center;align-items:stretch;margin-top:24px;">
+                    <div class="info-card about-card-blue">
+                        <i class="fas fa-eye"></i>
+                        <h3>الرؤية</h3>
+                        <p>قيادة البحث والتطوير في المملكة العربية السعودية، والمساهمة في اقتصاد مزدهر يركز على الابتكار من أجل الإنسانية.</p>
+                    </div>
+                    <div class="info-card about-card-green">
+                        <i class="fas fa-bullseye"></i>
+                        <h3>الرسالة</h3>
+                        <p>تحقيق الابتكار في الأولويات الوطنية للمملكة وتسريع التقدم العلمي من خلال التوجه نحو الاتجاه المطلوب، والشراكات، والتمويل، وتنظيم النظام، والقدرات.</p>
+                    </div>
+                    <div class="info-card about-card-blue">
+                        <i class="fas fa-info-circle"></i>
+                        <h3>نبذة عن المنصة</h3>
+                        <p>اندلالي منصة سعودية ذكية تهدف إلى تمكين الطلاب والباحثين في جميع مراحل البحث العلمي، من خلال تقديم استشارات فورية، مصادر موثوقة، وأدوات مبتكرة تدعم رحلة البحث والتطوير.</p>
+                    </div>
+                    <div class="info-card about-card-orange">
+                        <i class="fas fa-bullhorn"></i>
+                        <h3>أهدافنا</h3>
+                        <p>تسريع وتيرة البحث العلمي في المملكة، بناء جيل من الباحثين المتميزين، وتسهيل الوصول إلى المعرفة والمصادر الحديثة.</p>
+                    </div>
+                    <div class="info-card about-card-green">
+                        <i class="fas fa-gem"></i>
+                        <h3>قيمنا</h3>
+                        <p>الابتكار، الدقة، الشفافية، دعم المجتمع البحثي، والالتزام بأعلى معايير الجودة العلمية.</p>
+                    </div>
+                    <div class="info-card about-card-orange">
+                        <i class="fas fa-users"></i>
+                        <h3>فريق العمل</h3>
+                        <p>يضم فريق اندلالي نخبة من الأكاديميين، المطورين، وخبراء الذكاء الاصطناعي، يعملون معًا لتحقيق رؤية المملكة في الريادة البحثية.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Consultation Section (المعلمة الذكية) -->
+    <section id="consultation" class="consultation">
+        <div class="container">
+            <h2 class="section-title">المعلمة الذكية للبحث العلمي</h2>
+            <div class="consultation-container">
+                <div class="consultation-form">
+                    <div class="form-group">
+                        <label for="legal-query">اكتب استفسارك البحثي أو العلمي:</label>
+                        <textarea id="legal-query" placeholder="مثال: كيف أكتب منهجية البحث العلمي؟ أو ما هي خطوات إعداد خطة بحث؟" rows="6"></textarea>
+                    </div>
+                    <button id="submit-query" class="submit-btn">
+                        <i class="fas fa-search"></i>
+                        أرسل استفسارك
+                    </button>
+                </div>
+                <div class="consultation-result" id="consultation-result">
+                    <div class="result-header">
+                        <h3>الإجابة العلمية</h3>
+                        <div class="result-meta">
+                            <span class="time">الوقت: -- ثانية</span>
+                        </div>
+                    </div>
+                    <div class="result-content" id="result-content">
+                        <div class="loading-state" id="initial-loading">
+                            <i class="fas fa-cog fa-spin"></i>
+                            <p>جاري تحميل النظام...</p>
+                        </div>
+                        <p class="placeholder" id="placeholder-text" style="display: none;">ستظهر الإجابة العلمية هنا بعد إرسال استفسارك</p>
+                    </div>
+                    <div class="answer-actions" id="answer-actions" style="display: none; text-align:center; margin: 12px 0 0 0;">
+                        <button class="cta-button" id="copy-answer-btn" style="margin-left:8px;"><i class="fas fa-copy"></i> نسخ الإجابة</button>
+                        <button class="cta-button" id="download-answer-btn"><i class="fas fa-file-pdf"></i> تحميل الإجابة PDF</button>
+                    </div>
+                    <div class="rating-section" id="rating-section" style="display: none;">
+                        <h4>هل كانت الإجابة مفيدة؟</h4>
+                        <div class="rating-buttons">
+                            <button class="rating-btn positive" id="positive-rating">
+                                <i class="fas fa-check-circle"></i>
+                                مفيدة
+                            </button>
+                            <button class="rating-btn negative" id="negative-rating">
+                                <i class="fas fa-times-circle"></i>
+                                غير مفيدة
+                            </button>
+                        </div>
+                        <div class="comment-section" id="comment-section" style="display: none;">
+                            <textarea id="user-comment" placeholder="أضف تعليقك (اختياري)..." rows="3"></textarea>
+                            <button id="submit-rating" class="submit-rating-btn">إرسال التقييم</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- مواقع داعمة -->
+    <section id="support" class="info-section">
+        <div class="container">
+            <div class="info-content">
+                <h2>مواقع داعمة للباحثين</h2>
+                <div class="info-cards">
+                    <div class="info-card">
+                        <i class="fas fa-graduation-cap"></i>
+                        <h3>الباحث العلمي من جوجل</h3>
+                        <a href="https://scholar.google.com/?hl=ar" class="support-link" target="_blank">زيارة الموقع</a>
+                    </div>
+                    <div class="info-card">
+                        <i class="fas fa-network-wired"></i>
+                        <h3>هيئة تنمية البحث والابتكار</h3>
+                        <a href="https://rdia.gov.sa/" class="support-link" target="_blank">زيارة الموقع</a>
+                    </div>
+                    <div class="info-card">
+                        <i class="fas fa-book-open"></i>
+                        <h3>منصة المنهل</h3>
+                        <a href="https://almanhal.com/ar" class="support-link" target="_blank">زيارة الموقع</a>
+                    </div>
+                    <div class="info-card">
+                        <i class="fas fa-university"></i>
+                        <h3>المكتبة الرقمية السعودية</h3>
+                        <a href="https://sdl.edu.sa/" class="support-link" target="_blank">زيارة الموقع</a>
+                    </div>
+                    <div class="info-card">
+                        <i class="fas fa-university"></i>
+                        <h3>مكتبة الملك فهد الوطنية</h3>
+                        <a href="https://kfnl.gov.sa/ar/Pages/default.aspx" class="support-link" target="_blank">زيارة الموقع</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- تحليلات الخريطة -->
+    <section id="map" class="info-section">
+        <div class="container">
+            <div class="info-content">
+                <h2>تحليلات الخريطة</h2>
+                <div class="info-cards">
+                    <div class="info-card" style="min-width:340px;max-width:700px;min-height:420px;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+                        <i class="fas fa-map"></i>
+                        <h3>خريطة تفاعلية</h3>
+                        <h4 style="text-align:center;margin:18px 0 10px 0;font-size:1.08rem;">نسبة استخدام الموقع في المدن الرئيسية</h4>
+                        <div id="ksa-map" style="width:98%;max-width:640px;height:260px;margin:0 auto 12px auto;border-radius:14px;overflow:hidden;box-shadow:0 2px 12px rgba(44,76,130,0.08);"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>اندلالي</h3>
+                    <p>المعلمة الذكية للبحث العلمي</p>
+                    <p>منصة ذكية تقدم استشارات بحثية وعلمية للطلاب والباحثين</p>
+                </div>
+                <div class="footer-section">
+                    <h3>الوظائف الأساسية</h3>
+                    <ul>
+                        <li>إدخال استفسار بحثي أو علمي نصي</li>
+                        <li>الحصول على إجابة من الذكاء الاصطناعي</li>
+                        <li>تقييم الإجابة (مفيدة / غير مفيدة)</li>
+                        <li>تحميل دليل مشروع التخرج</li>
+                        <li>الوصول لمواقع داعمة</li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>الأهداف</h3>
+                    <ul>
+                        <li>دعم أكثر من 50 باحث وطالب خلال أول أسبوعين</li>
+                        <li>معدل رضا ≥ 80%</li>
+                        <li>وقت استجابة 10 ثوانٍ</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 اندلالي - المعلمة الذكية للبحث العلمي. جميع الحقوق محفوظة.</p>
+                <p class="disclaimer">هذا النموذج مبدئي للاختبار فقط ولا يمثل رأيًا علميًا رسميًا</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts with error handling -->
+    <script>
+        // Global error handler for script loading
+        window.addEventListener('error', function(e) {
+            console.error('Script loading error:', e);
+            if (e.target.tagName === 'SCRIPT') {
+                document.getElementById('result-content').innerHTML = `
+                    <div class="error-message">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <p>حدث خطأ في تحميل الملفات. يرجى تحديث الصفحة والمحاولة مرة أخرى.</p>
+                    </div>
+                `;
+            }
+        });
+    </script>
+    
+    <!-- Load configuration first -->
+    <script src="config.js"></script>
+    
+    <!-- Load API service -->
+    <script src="api-service.js"></script>
+    
+    <!-- Load main application -->
+    <script src="script.js"></script>
+    
+    <!-- Fallback if scripts fail to load -->
+    <script>
+        // Check if essential objects are loaded
+        function checkScriptsLoaded() {
+            const loadingElement = document.getElementById('initial-loading');
+            const placeholderElement = document.getElementById('placeholder-text');
+            
+            console.log('Checking scripts...');
+            console.log('CONFIG available:', typeof CONFIG !== 'undefined');
+            console.log('apiService available:', typeof apiService !== 'undefined');
+            
+            if (typeof CONFIG === 'undefined') {
+                console.error('CONFIG not loaded');
+                document.getElementById('result-content').innerHTML = `
+                    <div class="error-message">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <p>خطأ في تحميل الإعدادات. يرجى تحديث الصفحة.</p>
+                    </div>
+                `;
+            } else if (typeof apiService === 'undefined') {
+                console.error('apiService not loaded');
+                document.getElementById('result-content').innerHTML = `
+                    <div class="error-message">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <p>خطأ في تحميل خدمة API. يرجى تحديث الصفحة.</p>
+                    </div>
+                `;
+            } else {
+                // Everything loaded successfully
+                console.log('All scripts loaded successfully');
+                if (loadingElement) {
+                    loadingElement.style.display = 'none';
+                }
+                if (placeholderElement) {
+                    placeholderElement.style.display = 'block';
+                }
+            }
+        }
+        
+        // Check immediately and then retry
+        checkScriptsLoaded();
+        setTimeout(checkScriptsLoaded, 500);
+        setTimeout(checkScriptsLoaded, 1000);
+        setTimeout(checkScriptsLoaded, 2000);
+    </script>
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+    // خريطة تفاعلية للمدن الرئيسية في السعودية مع بيانات افتراضية
+    document.addEventListener('DOMContentLoaded', function() {
+      var mapEl = document.getElementById('ksa-map');
+      if (!mapEl) return;
+      var map = L.map('ksa-map').setView([23.8859, 45.0792], 5.3);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors'
+      }).addTo(map);
+      // بيانات افتراضية للمدن الرئيسية
+      var cities = [
+        { name: 'الرياض',    lat: 24.7136, lng: 46.6753, usage: 40 },
+        { name: 'جدة',      lat: 21.4858, lng: 39.1925, usage: 25 },
+        { name: 'مكة',      lat: 21.3891, lng: 39.8579, usage: 10 },
+        { name: 'الدمام',   lat: 26.4207, lng: 50.0888, usage: 8 },
+        { name: 'المدينة',  lat: 24.5247, lng: 39.5692, usage: 7 },
+        { name: 'أبها',     lat: 18.2465, lng: 42.5117, usage: 5 },
+        { name: 'حائل',     lat: 27.5114, lng: 41.7208, usage: 3 },
+        { name: 'الجوف',    lat: 29.9727, lng: 40.2064, usage: 28 }
+      ];
+      cities.forEach(function(city) {
+        var circle = L.circle([city.lat, city.lng], {
+          color: '#2d6cdf',
+          fillColor: '#2d6cdf',
+          fillOpacity: 0.25,
+          radius: 12000 + city.usage * 800
+        }).addTo(map);
+        circle.bindPopup('<b>' + city.name + '</b><br>نسبة الاستخدام: ' + city.usage + '%');
+      });
+    });
+    </script>
+</body>
+</html> 
