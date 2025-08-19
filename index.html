@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>المعلمة الذكية (إندلالي)</title>
     <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
     <header>
@@ -23,8 +25,8 @@
                 <li><a href="#about">عن إندلالي</a></li>
                 <li><a href="#research-sites">مواقع داعمة للبحث العلمي</a></li>
                 <li><a href="#community">المشاركة المجتمعية</a></li>
+                <li><a href="#ai-consultation">المعلمة الذكية</a></li>
                 <li><a href="#interactive-map">الخريطة التفاعلية</a></li>
-                <li><a href="#statistics">المعلومات الإحصائية</a></li>
             </ul>
         </nav>
     </header>
@@ -199,6 +201,67 @@
                 </div>
             </div>
         </section>
+        
+        <!-- AI Chat Section - المحادثة مع المعلمة الذكية -->
+        <section id="ai-consultation" class="consultation">
+            <div class="container">
+                <h2 class="section-title">المحادثة مع المعلمة الذكية</h2>
+                <div class="consultation-container">
+                    <div class="consultation-form">
+                        <div class="form-group">
+                            <label for="educational-query">اكتب استفسارك التعليمي:</label>
+                            <textarea id="educational-query" placeholder="مثال: ما هي أفضل طرق التعلم الفعال؟ أو كيف يمكنني تطوير مهاراتي الأكاديمية؟" rows="6"></textarea>
+                        </div>
+                        <button id="submit-educational-query" class="submit-btn">
+                            <i class="fas fa-brain"></i>
+                            أرسل سؤالك للمعلمة الذكية
+                        </button>
+                    </div>
+                    <div class="consultation-result" id="educational-consultation-result">
+                        <div class="result-header">
+                            <h3>إجابة المعلمة الذكية</h3>
+                            <div class="result-meta">
+                                <span class="time">الوقت: -- ثانية</span>
+                            </div>
+                        </div>
+                        <div class="result-content" id="educational-result-content">
+                            <div class="loading-state" id="educational-initial-loading">
+                                <i class="fas fa-cog fa-spin"></i>
+                                <p>جاري تحميل النظام...</p>
+                            </div>
+                            <p class="placeholder" id="educational-placeholder-text" style="display: none;">ستظهر إجابة المعلمة الذكية هنا بعد إرسال استفسارك</p>
+                        </div>
+                        <div class="result-actions" id="educational-result-actions" style="display: none;">
+                            <button class="action-btn copy-btn" id="educational-copy-btn" title="نسخ الإجابة">
+                                <i class="fas fa-copy"></i>
+                                نسخ الإجابة
+                            </button>
+                            <button class="action-btn print-btn" id="educational-print-btn" title="طباعة الإجابة">
+                                <i class="fas fa-print"></i>
+                                طباعة الإجابة
+                            </button>
+                        </div>
+                        <div class="rating-section" id="educational-rating-section" style="display: none;">
+                            <h4>هل كانت الإجابة مفيدة؟</h4>
+                            <div class="rating-buttons">
+                                <button class="rating-btn positive" id="educational-positive-rating">
+                                    <i class="fas fa-thumbs-up"></i>
+                                    مفيدة
+                                </button>
+                                <button class="rating-btn negative" id="educational-negative-rating">
+                                    <i class="fas fa-thumbs-down"></i>
+                                    غير مفيدة
+                                </button>
+                            </div>
+                            <div class="comment-section" id="educational-comment-section" style="display: none;">
+                                <textarea id="educational-user-comment" placeholder="أضف تعليقك (اختياري)..." rows="3"></textarea>
+                                <button id="educational-submit-rating" class="submit-rating-btn">إرسال التقييم</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
         <!-- org-hero-card section removed as requested -->
     </main>
     <section id="interactive-map" class="interactive-map-section">
@@ -294,6 +357,85 @@
     <footer>
         <p>جميع الحقوق محفوظة © 2025 منصة (إندلالي)</p>
     </footer>
+    
+    <!-- Scripts with error handling -->
+    <script>
+        // Global error handler for script loading
+        window.addEventListener('error', function(e) {
+            console.error('Script loading error:', e);
+            if (e.target.tagName === 'SCRIPT') {
+                const educationalResultContent = document.getElementById('educational-result-content');
+                if (educationalResultContent) {
+                    educationalResultContent.innerHTML = `
+                        <div class="error-message">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <p>حدث خطأ في تحميل الملفات. يرجى تحديث الصفحة والمحاولة مرة أخرى.</p>
+                        </div>
+                    `;
+                }
+            }
+        });
+    </script>
+    
+    <!-- Load configuration first -->
+    <script src="config.js"></script>
+    
+    <!-- Load API service -->
+    <script src="api-service.js"></script>
+    
+    <!-- Load main application -->
     <script src="script.js"></script>
+    
+    <!-- Fallback if scripts fail to load -->
+    <script>
+        // Check if essential objects are loaded
+        function checkScriptsLoaded() {
+            const educationalLoadingElement = document.getElementById('educational-initial-loading');
+            const educationalPlaceholderElement = document.getElementById('educational-placeholder-text');
+            
+            console.log('Checking scripts...');
+            console.log('CONFIG available:', typeof CONFIG !== 'undefined');
+            console.log('apiService available:', typeof apiService !== 'undefined');
+            
+            if (typeof CONFIG === 'undefined') {
+                console.error('CONFIG not loaded');
+                const educationalResultContent = document.getElementById('educational-result-content');
+                if (educationalResultContent) {
+                    educationalResultContent.innerHTML = `
+                        <div class="error-message">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <p>خطأ في تحميل الإعدادات. يرجى تحديث الصفحة.</p>
+                        </div>
+                    `;
+                }
+            } else if (typeof apiService === 'undefined') {
+                console.error('apiService not loaded');
+                const educationalResultContent = document.getElementById('educational-result-content');
+                if (educationalResultContent) {
+                    educationalResultContent.innerHTML = `
+                        <div class="error-message">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <p>خطأ في تحميل خدمة API. يرجى تحديث الصفحة.</p>
+                        </div>
+                    `;
+                }
+            } else {
+                // Everything loaded successfully
+                console.log('All scripts loaded successfully');
+                if (educationalLoadingElement) {
+                    educationalLoadingElement.style.display = 'none';
+                }
+                if (educationalPlaceholderElement) {
+                    educationalPlaceholderElement.style.display = 'block';
+                }
+            }
+        }
+        
+        // Check immediately and then retry
+        checkScriptsLoaded();
+        setTimeout(checkScriptsLoaded, 500);
+        setTimeout(checkScriptsLoaded, 1000);
+        setTimeout(checkScriptsLoaded, 2000);
+    </script>
 </body>
 </html> 
